@@ -3339,9 +3339,21 @@ PrefabInstance:
       value: Player
       objectReference: {fileID: 0}
     - target: {fileID: 289860950417131789, guid: b30f7c29cf229b346911c4439ecd11db, type: 3}
+      propertyPath: jumps
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 289860950417131789, guid: b30f7c29cf229b346911c4439ecd11db, type: 3}
+      propertyPath: moveSpeed
+      value: 4000
+      objectReference: {fileID: 0}
+    - target: {fileID: 289860950417131789, guid: b30f7c29cf229b346911c4439ecd11db, type: 3}
       propertyPath: playerCam
       value: 
       objectReference: {fileID: 1895100685}
+    - target: {fileID: 289860950417131789, guid: b30f7c29cf229b346911c4439ecd11db, type: 3}
+      propertyPath: extraJumpNerf
+      value: 260
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b30f7c29cf229b346911c4439ecd11db, type: 3}
 --- !u!1001 &1235241901632865415
@@ -3448,6 +3460,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1827776512}
     m_Modifications:
+    - target: {fileID: 7279621215589361576, guid: ffabfd41acefda042a5d0122eedee262, type: 3}
+      propertyPath: allowHold
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7279621215589361576, guid: ffabfd41acefda042a5d0122eedee262, type: 3}
+      propertyPath: magazineSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7279621215589361576, guid: ffabfd41acefda042a5d0122eedee262, type: 3}
+      propertyPath: laserDuration
+      value: 0.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 7279621215589361576, guid: ffabfd41acefda042a5d0122eedee262, type: 3}
+      propertyPath: timeBetweenShots
+      value: 0.15
+      objectReference: {fileID: 0}
     - target: {fileID: 7279621215642095380, guid: ffabfd41acefda042a5d0122eedee262, type: 3}
       propertyPath: m_RootOrder
       value: 1

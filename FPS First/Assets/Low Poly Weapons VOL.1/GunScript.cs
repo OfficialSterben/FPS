@@ -27,7 +27,9 @@ public class GunScript : MonoBehaviour
 
     //bools
     bool shooting, readyToShoot, reloading;
+    public bool allowInvoke = true;
 
+    //reference
     public ParticleSystem gunSmoke;
 
     public Camera fpsCam;
@@ -60,10 +62,17 @@ public class GunScript : MonoBehaviour
             shooting = Input.GetButtonDown("Fire1");
         }
 
+        reloading = Input.GetKeyDown(KeyCode.R);
+
         if (readyToShoot && !reloading && shooting && bulletsLeft > 0)
         {
             Shoot();
         }
+        else if (bulletsLeft < 1 || (reloading && bulletsLeft < magazineSize))
+        {
+            Reload();
+        }
+
     }
     
     void Shoot()
@@ -103,7 +112,19 @@ public class GunScript : MonoBehaviour
         bulletsShot++;
         bulletsLeft--;
 
+        //Invoke resertShot function (if not already invoked)
+        if (allowInvoke)
+        {
+            Invoke("ResetShot", timeBetweenShots);
+            allowInvoke = false;
+        }
+    }
+
+    void ResetShot()
+    {
+        //Ready to shoot then invoke again
         readyToShoot = true;
+        allowInvoke = true;
     }
 
     IEnumerator ShootLaser()
@@ -111,5 +132,10 @@ public class GunScript : MonoBehaviour
         line.enabled = true;
         yield return new WaitForSeconds(laserDuration);
         line.enabled = false;
+    }
+
+    void Reload()
+    {
+        bulletsLeft = magazineSize;
     }
 }

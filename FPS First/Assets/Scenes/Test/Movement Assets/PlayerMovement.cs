@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour {
 
+    //Jump Amount
+    public int jumps = 1;
+    private int jumpCount;
+    public float extraJumpNerf = 100f;
+
     //Assingables
     public Transform playerCam;
     public Transform orientation;
@@ -54,6 +59,7 @@ public class PlayerMovement : MonoBehaviour {
         playerScale =  transform.localScale;
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        jumpCount = jumps - 1;
     }
 
     
@@ -64,6 +70,7 @@ public class PlayerMovement : MonoBehaviour {
     private void Update() {
         MyInput();
         Look();
+        if (grounded) { jumpCount = jumps; }
     }
 
     /// <summary>
@@ -109,7 +116,7 @@ public class PlayerMovement : MonoBehaviour {
         CounterMovement(x, y, mag);
         
         //If holding jump && ready to jump, then jump
-        if (readyToJump && jumping) Jump();
+        if (readyToJump && jumping ) Jump();
 
         //Set max speed
         float maxSpeed = this.maxSpeed;
@@ -159,6 +166,25 @@ public class PlayerMovement : MonoBehaviour {
                 rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
             
             Invoke(nameof(ResetJump), jumpCooldown);
+        }
+        else if (!grounded && jumpCount > 0) {
+            jumpCount--;
+            //Nerf the extra jump
+            jumpForce -= extraJumpNerf;
+
+            //Add jump forces
+            rb.AddForce(Vector2.up * jumpForce * 1.5f);
+            rb.AddForce(normalVector * jumpForce * 0.5f);
+
+            //If jumping while falling, reset y velocity.
+            Vector3 vel = rb.velocity;
+            if (rb.velocity.y < 0.5f)
+                rb.velocity = new Vector3(vel.x, 0, vel.z);
+            else if (rb.velocity.y > 0)
+                rb.velocity = new Vector3(vel.x, vel.y / 2, vel.z);
+
+            //Turn it back to normal
+            jumpForce += extraJumpNerf;
         }
     }
     
