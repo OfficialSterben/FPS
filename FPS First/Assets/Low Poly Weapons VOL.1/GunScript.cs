@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using TMPro;
 
 [RequireComponent(typeof(LineRenderer))]
 
@@ -35,6 +36,9 @@ public class GunScript : MonoBehaviour
     public Camera fpsCam;
     public Transform attackPoint;
 
+    //Graphics
+    public TextMeshProUGUI ammunitionDisplay;
+
     void Start()
     {
         bulletsLeft = magazineSize;
@@ -49,6 +53,9 @@ public class GunScript : MonoBehaviour
     void Update()
     {
         Inputs();
+
+        if (ammunitionDisplay != null)
+            ammunitionDisplay.SetText(bulletsLeft + " / " + magazineSize);
     }
 
     private void Inputs()
@@ -62,16 +69,11 @@ public class GunScript : MonoBehaviour
             shooting = Input.GetButtonDown("Fire1");
         }
 
-        reloading = Input.GetKeyDown(KeyCode.R);
+        if (Input.GetKeyDown(KeyCode.R) && bulletsLeft < magazineSize && !reloading) Reload();
 
-        if (readyToShoot && !reloading && shooting && bulletsLeft > 0)
-        {
-            Shoot();
-        }
-        else if (bulletsLeft < 1 || (reloading && bulletsLeft < magazineSize))
-        {
-            Reload();
-        }
+        if (readyToShoot && shooting && !reloading && bulletsLeft <= 0) Reload();
+
+        if (readyToShoot && !reloading && shooting && bulletsLeft > 0) Shoot();
 
     }
     
@@ -134,8 +136,15 @@ public class GunScript : MonoBehaviour
         line.enabled = false;
     }
 
-    void Reload()
+    private void Reload()
+    {
+        reloading = true;
+        Invoke("ReloadFinished", reloadTime);
+    }
+
+    private void ReloadFinished()
     {
         bulletsLeft = magazineSize;
+        reloading = false;
     }
 }
